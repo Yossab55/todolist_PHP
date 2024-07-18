@@ -2,14 +2,15 @@
 $is_inserted = false;
 if ($_SERVER["REQUEST_METHOD"] = "GET") {
   include("connect.php");
-  if (in_array("insert", $_GET)) {
+  if (in_array("insert", $_POST)) {
     $data = [
-      "todo" => $_GET["todo"],
+      "todo" => $_POST["todo"],
       "statues" => "U"
     ];
     $sql_insert = "INSERT INTO tasks (task, sta) VALUES  (:todo, :statues )";
     $data_base_work->prepare($sql_insert)->execute($data);
-    $is_inserted = true;
+    // $is_inserted = true;
+    header("Location: index.php");
   }
 
   if (in_array("change_style", $_GET)) {
@@ -69,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] = "GET") {
   </nav>
   <!-- start inset task -->
   <div class="container">
-    <form action="" method="get">
+    <form action="" method="post">
       <h2>Write Your Tasks</h2>
       <div class="form">
         <input type="text" name="todo" placeholder="Wash the dishes">

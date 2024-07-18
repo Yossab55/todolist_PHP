@@ -2,7 +2,6 @@
   $is_inserted = false;
   if($_SERVER["REQUEST_METHOD"] = "GET") {
     include("connect.php");
-
     if(in_array("insert", $_GET)) {
       $data = [
         "todo" => $_GET["todo"],
@@ -12,6 +11,14 @@
       $data_base_work->prepare($sql_insert)->execute($data); 
       $is_inserted = true;
     }
+
+    if(in_array("change_style",$_GET)) {
+      if($_COOKIE['style'] !="dark") {
+        setcookie("style", "dark", time() +365 * 24 * 60 * 60);
+      } else {
+        setcookie("style", "light", time() +365 * 24 * 60 * 60);
+      }
+    } 
   }
 ?>
 
@@ -25,6 +32,11 @@
       <link rel="stylesheet" href="css/all.min.css">
       <link rel="stylesheet" href="css/main.css">
       <link rel="stylesheet" href="css/insert.css">
+      <?php
+        if( $_COOKIE['style'] == "dark") {
+          echo '<link rel="stylesheet" href="css/dark.css">';
+        } 
+    ?>
       <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" 
@@ -32,6 +44,21 @@
     <title>Add Tasks</title>
   </head>
   <body>
+    <nav>
+        <form action="" method="get" class="form_dark">
+          <div class="Dark_button">
+            <button type="submit" name="style" value="change_style">
+              <?php
+                if($_COOKIE['style'] =="light") {
+                  echo '<i class="fa-regular fa-sun fa-2xl sun"></i>';
+                } else {
+                  echo '<i class="fa-regular fa-moon fa-2xl moon"></i>';
+                }
+              ?>
+            </button>
+          </div>
+        </form>
+      </nav>
     <!-- start inset task -->
       <div class="container">
         <form action="" method="get">

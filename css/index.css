@@ -15,7 +15,8 @@
   color: var(--main-color);
 }
 /* end title */
-
+/* start nav */
+/* end nav */
 /* Start show tasks */
 .show_tasks {
   margin-top: 50px;
@@ -101,4 +102,3 @@
   color: white;
 }
 
-/* end go -task */

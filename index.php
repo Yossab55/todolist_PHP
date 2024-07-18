@@ -19,8 +19,14 @@
       $statement_truncate->execute();
       header("Location: index.php");
     }
+    if(in_array("change_style",$_GET)) {
+      if($_COOKIE['style'] !="dark") {
+        setcookie("style", "dark", time() +365 * 24 * 60 * 60);
+      } else {
+        setcookie("style", "light", time() +365 * 24 * 60 * 60);
+      }
+    } 
   }
-
 ?>
 
 
@@ -33,6 +39,11 @@
     <link rel="stylesheet" href="css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/index.css">
+    <?php
+        if( $_COOKIE['style'] == "dark") {
+          echo '<link rel="stylesheet" href="css/dark.css">';
+        } 
+    ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" 
@@ -41,67 +52,89 @@
   </head>
 
   <body>
+      <!-- end nav section -->
+        <nav>
+          <form action="" method="get" class="form_dark">
+            <div class="Dark_button">
+              <button type="submit" name="style" value="change_style">
+                <?php
+                    if($_COOKIE['style'] =="light") {
+                      echo '<i class="fa-regular fa-sun fa-2xl sun"></i>';
+                    } else {
+                      echo '<i class="fa-regular fa-moon fa-2xl moon"></i>';
+                    }
+                ?>
+              </button>
+            </div>
+          </form>
+        </nav>
+        <!-- end nav section -->
+        
     <!-- start welcome section -->
-    <div class="container">
-      <h1 class="title">Welcome To Your ToDo List <i class="fa-solid fa-table-list"></i></h1>
-    </div>
-    <!-- end welcome section -->
-    <!-- start show task -->
-      <div class="container show_tasks ">
-        <!-- IS THERE IS A TASK OR NO FIRST -->
-        <?php 
-          // if it's array then theres tasks else there is no task
-          $sql_number_rows = "SELECT COUNT(*) as num_rows FROM tasks";
-          $statement_number = $data_base_work->prepare($sql_number_rows);
-          $statement_number->execute();
-          $number = $statement_number->fetch(PDO::FETCH_ASSOC);
 
-          if($number["num_rows"] > 0) {
-          $sql_select = "SELECT * FROM tasks ORDER BY sta DESC";
-          $statement_select = $data_base_work->prepare($sql_select);
-          $statement_select->execute();
-
-            while($result = $statement_select->fetch(PDO::FETCH_ASSOC)) {
-              ?>
-              <div class="box <?php echo ($result["sta"] === "U")?  "bg-r": "bg-lg" ?> ">
-                <div class="task"><?php echo $result["task"]?></div>
-                <div class="buttons">
-                  <form action="" method="get">
-                    <button type="submit" name="complete" value="<?php echo $result["id"]?>">
-                      <i class="fa-solid fa-check "></i>
-                    </button>
-                    <button type="submit" name="delete" value="<?php echo $result["id"]?>">
-                      <i class="fa-regular fa-trash-can "></i>
+          <div class="container">
+            <h1 class="title">Welcome To Your ToDo List <i class="fa-solid fa-table-list"></i></h1>
+          </div>
+          <!-- end welcome section -->
+          <!-- start show task -->
+            <div class="container show_tasks ">
+              <!-- IS THERE IS A TASK OR NO FIRST -->
+              <?php 
+                // if it's array then theres tasks else there is no task
+                $sql_number_rows = "SELECT COUNT(*) as num_rows FROM tasks";
+                $statement_number = $data_base_work->prepare($sql_number_rows);
+                $statement_number->execute();
+                $number = $statement_number->fetch(PDO::FETCH_ASSOC);
+      
+                if($number["num_rows"] > 0) {
+                $sql_select = "SELECT * FROM tasks ORDER BY sta DESC";
+                $statement_select = $data_base_work->prepare($sql_select);
+                $statement_select->execute();
+      
+                  while($result = $statement_select->fetch(PDO::FETCH_ASSOC)) {
+                    ?>
+                    <div class="box <?php echo ($result["sta"] === "U")?  "bg-r": "bg-lg" ?> ">
+                      <div class="task"><?php echo $result["task"]?></div>
+                      <div class="buttons">
+                        <form action="" method="get">
+                          <button type="submit" name="complete" value="<?php echo $result["id"]?>">
+                            <i class="fa-solid fa-check "></i>
+                          </button>
+                          <button type="submit" name="delete" value="<?php echo $result["id"]?>">
+                            <i class="fa-regular fa-trash-can "></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                    <?php
+                  }
+                  // truncate all 
+                  ?>
+                  <form action="" method="get" class="truncate">
+                    <button type="submit" name="truncate" value = "truncate">
+                      Delete All <i class="fa-solid fa-trash"></i>
                     </button>
                   </form>
-                </div>
-              </div>
-              <?php
-            }
-            // truncate all 
-            ?>
-            <form action="" method="get" class="truncate">
-              <button type="submit" name="truncate" value = "truncate"> Delete All <i class="fa-solid fa-trash"></i></button>
-            </form>
-            <?php
-          } else {
-            echo "<h2 class='al-c '>
-              There Is No Tasks Today <i class='fa-solid fa-face-smile-wink c-green'></i>
-              </h2>";
-          }
-          
-        ?>
-      </div>
-    <!-- end show task -->
-    <!-- start to tasks -->
-    <div class="container go">
-      <div class="go-tasks">
-        <a href="insert.php">
-          <h2>Add Task</h2>
-          <span><i class="fa-solid fa-plus"></i></span>
-        </a>
-      </div>
-    </div>
-    <!-- end to tasks -->
+                  <?php
+                } else {
+                  echo "<h2 class='al-c '>
+                    There Is No Tasks Today <i class='fa-solid fa-face-smile-wink c-green'></i>
+                    </h2>";
+                }
+                
+              ?>
+            </div>
+          <!-- end show task -->
+          <!-- start to tasks -->
+          <div class="container go">
+            <div class="go-tasks">
+              <a href="insert.php">
+                <h2>Add Task</h2>
+                <span><i class="fa-solid fa-plus"></i></span>
+              </a>
+            </div>
+          </div>
+          <!-- end to tasks -->
+
   </body>
 </html>

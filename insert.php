@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] = "GET") {
       <div class="form">
         <input type="text" name="todo" placeholder="Wash the dishes">
         <button type="submit" name="submit" value="insert">
-          <i class="fa-solid fa-download fa-xl"></i>
+          <i class="fa-solid fa-paper-plane fa-xl"></i>
         </button>
       </div>
     </form>

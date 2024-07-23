@@ -1,6 +1,6 @@
 <?php
 $is_inserted = false;
-if ($_SERVER["REQUEST_METHOD"] = "GET") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
   include("connect.php");
   if (in_array("insert", $_POST)) {
     $data = [
@@ -9,24 +9,25 @@ if ($_SERVER["REQUEST_METHOD"] = "GET") {
     ];
     $sql_insert = "INSERT INTO tasks (task, sta) VALUES  (:todo, :statues )";
     $data_base_work->prepare($sql_insert)->execute($data);
-    // $is_inserted = true;
-    header("Location: index.php");
+    $is_inserted = true;
   }
+}
 
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
   if (in_array("change_style", $_GET)) {
-    if (isset($_COOKIE['style'])) {
-      if ($_COOKIE['style'] != "dark") {
+      if (isset($_COOKIE['style'])) {
+        if ($_COOKIE['style'] != "dark") {
+          setcookie("style", "dark", time() + 365 * 24 * 60 * 60);
+          header("Location: insert.php");
+        } else {
+          setcookie("style", "light", time() + 365 * 24 * 60 * 60);
+          header("Location: insert.php");
+        }
+      } else {
         setcookie("style", "dark", time() + 365 * 24 * 60 * 60);
         header("Location: insert.php");
-      } else {
-        setcookie("style", "light", time() + 365 * 24 * 60 * 60);
-        header("Location: insert.php");
       }
-    } else {
-      setcookie("style", "dark", time() + 365 * 24 * 60 * 60);
-      header("Location: insert.php");
     }
-  }
 }
 ?>
 

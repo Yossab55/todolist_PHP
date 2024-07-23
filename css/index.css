@@ -1,22 +1,12 @@
 /* Start title */
-.title {
-  font-size: 26px;
-  padding: 10px;
-  margin: 10px auto;
 
-  text-align: center;
-}
-@media (max-width: 768px) {
-  .title {
-    font-size: 30px;
-  }
-}
 .title i {
   color: var(--main-color);
 }
 /* end title */
 /* start nav */
 /* end nav */
+
 /* Start show tasks */
 .show_tasks {
   margin-top: 50px;
@@ -24,7 +14,7 @@
   border-radius: 10px;
   padding: 10px;
 }
-.show_tasks h2{
+.show_tasks h2 {
   font-size: 20px;
 }
 .show_tasks .box {
@@ -51,11 +41,15 @@
   height: 35px;
 }
 .show_tasks .box form button[name="complete"] {
-  margin-right: 15px;
+  margin-right: 5px;
   color: var(--second-color);
 }
 .show_tasks .box form button[name="delete"] {
   color: var(--color-red);
+  margin-right: 5px;
+}
+.show_tasks .box form button[name="upload"] {
+  color: var(--color-light-blue);
 }
 .show_tasks .truncate {
   text-align: center;
@@ -83,9 +77,9 @@
   align-items: center;
   width: fit-content;
   padding: 10px 20px;
-    background: #2196F3;
-    border-radius: 5px;
-    cursor: pointer;
+  background: var(--color-light-blue);
+  border-radius: 5px;
+  cursor: pointer;
 }
 .go-tasks a {
   color: #fff;
@@ -107,4 +101,3 @@
   margin-left: 15px;
   color: white;
 }
-

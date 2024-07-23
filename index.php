@@ -1,23 +1,31 @@
 <?php
 include("connect.php");
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-  if (array_key_exists("delete", $_GET)) {
-    $sql_delete = "DELETE FROM tasks WHERE id = " . $_GET["delete"];
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (array_key_exists("delete", $_POST)) {
+    $sql_delete = "DELETE FROM tasks WHERE id = " . $_POST["delete"];
     $statement_delete = $data_base_work->prepare($sql_delete);
     $statement_delete->execute();
     header("Location: index.php");
   }
-  if (array_key_exists("complete", $_GET)) {
-    $sql_update = "UPDATE tasks SET sta = 'C' WHERE id=" . $_GET["complete"];
+  if (array_key_exists("complete", $_POST)) {
+    $sql_update = "UPDATE tasks SET sta = 'C' WHERE id=" . $_POST["complete"];
     $statement_update = $data_base_work->prepare($sql_update);
     $statement_update->execute();
     header("Location: index.php");
   }
-  if (in_array("truncate", $_GET)) {
+  if (in_array("truncate", $_POST)) {
     $sql_truncate = "DELETE FROM tasks";
     $statement_truncate = $data_base_work->prepare($sql_truncate);
     $statement_truncate->execute();
   }
+  if( isset($_POST["upload"])) {
+    $_SESSION['image_id'] = $_POST['upload'];
+    header("Location: upload.php");
+  }
+}
+if ($_SERVER["REQUEST_METHOD"] == "GET") { 
   if (in_array("change_style", $_GET)) {
     if (isset($_COOKIE['style'])) {
       if ($_COOKIE['style'] != "dark") {
@@ -33,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
   }
 }
+
 ?>
 
 
@@ -102,12 +111,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         <div class="box <?php echo ($result["sta"] === "U") ?  "bg-r" : "bg-lg" ?> ">
           <div class="task"><?php echo $result["task"] ?></div>
           <div class="buttons">
-            <form action="" method="get">
+            <form action="" method="post">
               <button type="submit" name="complete" value="<?php echo $result["id"] ?>">
                 <i class="fa-solid fa-check "></i>
               </button>
               <button type="submit" name="delete" value="<?php echo $result["id"] ?>">
                 <i class="fa-regular fa-trash-can "></i>
+              </button>
+              <button type="submit" name="upload" value="<?php echo $result["id"] ?>">
+                <i class="fa-regular fa-image"></i>
               </button>
             </form>
           </div>
@@ -116,16 +128,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
       }
       // truncate all 
       ?>
-      <form action="" method="get" class="truncate">
+      <form action="" method="post" class="truncate">
         <button type="submit" name="truncate" value="truncate">
           Delete All <i class="fa-solid fa-trash"></i>
         </button>
       </form>
     <?php
     } else {
-      echo "<h2 class='al-c '>
-                    There Is No Tasks Today <i class='fa-solid fa-face-smile-wink c-green'></i>
-                    </h2>";
+      echo "<h2 class='al-c '>";
+      echo "here Is No Tasks Today <i class='fa-solid fa-face-smile-wink c-green'></i>" ;
+      echo "</h2>";
     }
 
     ?>

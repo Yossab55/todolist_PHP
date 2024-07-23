@@ -114,13 +114,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     ?>
     <!-- go back home -->
-      <div class="container">
-        <div class="go_back">
-          <a href="index.php">
-            <p>Go Back To Home page</p>
-            <i class="fa-solid fa-house"></i>
-          </a>
-        </div>
+    <div class="container">
+      <div class="go_back">
+        <a href="index.php">
+          <p>Go Back To Home page</p>
+          <i class="fa-solid fa-house"></i>
+        </a>
       </div>
+    </div>
   </body>
 </html>

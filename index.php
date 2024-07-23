@@ -3,10 +3,19 @@ include("connect.php");
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
   if (array_key_exists("delete", $_POST)) {
+    $sql_select_filename = "SELECT filename_db FROM tasks WHERE id=". $_POST["delete"];
+    $statement_select_filename = $data_base_work->prepare($sql_select_filename);
+    $statement_select_filename->execute();
+    $filename = $statement_select_filename->fetch(PDO::FETCH_ASSOC);
+    $path = "upload/". $filename["filename_db"];
+    unlink($path);
+
     $sql_delete = "DELETE FROM tasks WHERE id = " . $_POST["delete"];
     $statement_delete = $data_base_work->prepare($sql_delete);
     $statement_delete->execute();
+
     header("Location: index.php");
   }
   if (array_key_exists("complete", $_POST)) {
@@ -16,13 +25,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: index.php");
   }
   if (in_array("truncate", $_POST)) {
+    $files = glob('upload/');
+    foreach($files as $file) {
+      unlink($file);
+    }
     $sql_truncate = "DELETE FROM tasks";
     $statement_truncate = $data_base_work->prepare($sql_truncate);
     $statement_truncate->execute();
+    
+    header("Location: index.php");
   }
   if( isset($_POST["upload"])) {
     $_SESSION['image_id'] = $_POST['upload'];
     header("Location: upload.php");
+  }
+  if( isset($_POST["details"])) {
+    $_SESSION['image_id'] = $_POST['details'];
+    header("Location: details.php");
   }
 }
 if ($_SERVER["REQUEST_METHOD"] == "GET") { 
@@ -112,14 +131,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
           <div class="task"><?php echo $result["task"] ?></div>
           <div class="buttons">
             <form action="" method="post">
-              <button type="submit" name="complete" value="<?php echo $result["id"] ?>">
+              <button type="submit" name="complete" value="<?php echo $result["id"] ?>"title="Complete task">
                 <i class="fa-solid fa-check "></i>
               </button>
-              <button type="submit" name="delete" value="<?php echo $result["id"] ?>">
+              <button type="submit" name="delete" value="<?php echo $result["id"] ?>"title="Delete task">
                 <i class="fa-regular fa-trash-can "></i>
               </button>
-              <button type="submit" name="upload" value="<?php echo $result["id"] ?>">
+              <button type="submit" name="upload" value="<?php echo $result["id"] ?>" title="Upload image">
                 <i class="fa-regular fa-image"></i>
+              </button>
+              <button type="submit" name="details" value="<?php echo $result["id"] ?>" title="See details">
+                <i class="fa-solid fa-info "></i>
               </button>
             </form>
           </div>

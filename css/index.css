@@ -32,23 +32,23 @@
   font-size: 1.7rem;
   font-weight: bold;
 }
-.show_tasks .box form button {
+.show_tasks .box form button, .show_tasks .box form a{
   border: none;
   cursor: pointer;
   background-color: white;
   border-radius: 50%;
   width: 35px;
   height: 35px;
+  padding: 10px;
+  margin: 0 5px;
 }
 .show_tasks .box form button[name="complete"] {
-  margin-right: 5px;
   color: var(--second-color);
 }
 .show_tasks .box form button[name="delete"] {
   color: var(--color-red);
-  margin-right: 5px;
 }
-.show_tasks .box form button[name="upload"] {
+.show_tasks .box form .upload{
   color: var(--color-light-blue);
 }
 .show_tasks .truncate {

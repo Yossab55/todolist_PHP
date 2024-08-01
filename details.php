@@ -1,5 +1,4 @@
 <?php
-  session_start();
   if($_SERVER["REQUEST_METHOD"] == "GET") {
     if (in_array("change_style", $_GET)) {
       if (isset($_COOKIE['style'])) {
@@ -17,7 +16,7 @@
     }
   }
   include("connect.php");
-  $sql_select = "SELECT * FROM tasks WHERE id=". $_SESSION['image_id'];
+  $sql_select = "SELECT * FROM tasks WHERE id=". $_GET['id'];
   $statement_select = $data_base_work->prepare($sql_select);
   $statement_select->execute();
   $result = $statement_select->fetch(PDO::FETCH_ASSOC)
@@ -57,6 +56,9 @@
         </div>
       </form>
     </nav>
+    <?php 
+      if($result){
+    ?>
     <div class="container">
       <h1 class="title">Here Is your Details About Your task <i class="fa-regular fa-image"></i></h1>
     </div>
@@ -70,6 +72,13 @@
         </div>
       </div>
     </div>
+    <?php 
+      }else{
+    ?>
+    <h1 style="text-align: center;">NO DATA FOUND !</h1>
+    <?php 
+      }
+    ?>
     <!-- end show details section -->
     <!-- go back home -->
     <div class="container">

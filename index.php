@@ -5,11 +5,11 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   if (array_key_exists("delete", $_POST)) {
-    $sql_select_filename = "SELECT filename_db FROM tasks WHERE id=". $_POST["delete"];
+    $sql_select_filename = "SELECT filename_db FROM tasks WHERE id=" . $_POST["delete"];
     $statement_select_filename = $data_base_work->prepare($sql_select_filename);
     $statement_select_filename->execute();
     $filename = $statement_select_filename->fetch(PDO::FETCH_ASSOC);
-    $path = "upload/". $filename["filename_db"];
+    $path = "upload/" . $filename["filename_db"];
     unlink($path);
 
     $sql_delete = "DELETE FROM tasks WHERE id = " . $_POST["delete"];
@@ -26,25 +26,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   if (in_array("truncate", $_POST)) {
     $files = glob('upload/');
-    foreach($files as $file) {
+    foreach ($files as $file) {
       unlink($file);
     }
     $sql_truncate = "DELETE FROM tasks";
     $statement_truncate = $data_base_work->prepare($sql_truncate);
     $statement_truncate->execute();
-    
+
     header("Location: index.php");
   }
-  if( isset($_POST["upload"])) {
-    $_SESSION['image_id'] = $_POST['upload'];
-    header("Location: upload.php");
-  }
-  if( isset($_POST["details"])) {
-    $_SESSION['image_id'] = $_POST['details'];
-    header("Location: details.php");
-  }
 }
-if ($_SERVER["REQUEST_METHOD"] == "GET") { 
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
   if (in_array("change_style", $_GET)) {
     if (isset($_COOKIE['style'])) {
       if ($_COOKIE['style'] != "dark") {
@@ -131,18 +123,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
           <div class="task"><?php echo $result["task"] ?></div>
           <div class="buttons">
             <form action="" method="post">
-              <button type="submit" name="complete" value="<?php echo $result["id"] ?>"title="Complete task">
+              <button type="submit" name="complete" value="<?php echo $result["id"] ?>" title="Complete task">
                 <i class="fa-solid fa-check "></i>
               </button>
-              <button type="submit" name="delete" value="<?php echo $result["id"] ?>"title="Delete task">
+              <button type="submit" name="delete" value="<?php echo $result["id"] ?>" title="Delete task">
                 <i class="fa-regular fa-trash-can "></i>
               </button>
-              <button type="submit" name="upload" value="<?php echo $result["id"] ?>" title="Upload image">
+              <a href="upload.php?id=<?php echo $result["id"] ?>" class="upload">
                 <i class="fa-regular fa-image"></i>
-              </button>
-              <button type="submit" name="details" value="<?php echo $result["id"] ?>" title="See details">
+              </a>
+              <a href="details.php?id=<?php echo $result["id"] ?>" class="details-btn">
                 <i class="fa-solid fa-info "></i>
-              </button>
+              </a>
             </form>
           </div>
         </div>
@@ -158,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     <?php
     } else {
       echo "<h2 class='al-c '>";
-      echo "here Is No Tasks Today <i class='fa-solid fa-face-smile-wink c-green'></i>" ;
+      echo "here Is No Tasks Today <i class='fa-solid fa-face-smile-wink c-green'></i>";
       echo "</h2>";
     }
 
